@@ -1,136 +1,115 @@
 package ru.netology.domain.contructor;
-
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class RadioTest {
 
     @Test
-    void shouldRadioChannelNumber() {
+    void decreaseVolume() {
         Radio radio = new Radio();
-        radio.setCurrentRadioChannel(1);
-        assertEquals(1, radio.getCurrentRadioChannel());
-    }
-
-    @Test   // Тест переключения следующего радиоканала
-    public void shouldNextRadioChannel() {
-        Radio radio = new Radio(
-                5,
-                20);
-        radio.setCurrentRadioChannel(5);
-        radio.nextCurrentRadioChannel();
-        assertEquals(6, radio.getCurrentRadioChannel());
-    }
-
-    @Test // Тест переключения предыдущего радиоканала
-    public void shouldPrevRadioChannel() {
-        Radio radio = new Radio(
-                4,
-                10);
-        radio.setCurrentRadioChannel(4);
-        radio.prevCurrentRadioChannel();
-        assertEquals(3, radio.getCurrentRadioChannel());
-    }
-
-    @Test // Тест переключения радиоканала с 10 на 1
-    public void shouldNextMaxRadioChannel() {
-        Radio radio = new Radio(
-                10,
-                12);
-        radio.setCurrentRadioChannel(10);
-        radio.nextCurrentRadioChannel();
-        assertEquals(1, radio.getCurrentRadioChannel());
-    }
-
-    @Test // Тест переключения радиоканала с 1 на 10
-    public void shouldPrevMinRadioChannel() {
-        Radio radio = new Radio(
-                10,
-                0);
-        radio.setCurrentRadioChannel(1);
-        radio.prevCurrentRadioChannel();
-        assertEquals(10, radio.getCurrentRadioChannel());
-    }
-
-    @Test // Тест граничных значений
-    public void shouldBoundaryMaxRadioChannel() {
-        Radio radio = new Radio(
-                10,
-                15);
-        radio.setCurrentRadioChannel(11);
-        assertEquals(10, radio.getCurrentRadioChannel());
-    }
-
-    @Test // Тест граничных значений
-    public void shouldBoundaryMinRadioChannel() {
-        Radio radio = new Radio(
-                1,
-                7);
-        radio.setCurrentRadioChannel(-1);
-        assertEquals(1, radio.getCurrentRadioChannel());
-    }
-
-    @Test
-    void shoulVolume() {
-        Radio radio = new Radio();
-        radio.setCurrentVolume(0);
-        assertEquals(0, radio.getCurrentVolume());
-    }
-
-    @Test // Тест увеличения громкости звука (+)
-    public void shouldNextVolume() {
-        Radio radio = new Radio(
-                10,
-                5);
-        radio.nextCurrentVolume();
-        assertEquals(6, radio.getCurrentVolume());
-    }
-
-    @Test // Тест уменьшения громкости звука (-)
-    public void shoulPrevVolume() {
-        Radio radio = new Radio(
-                5,
-                6);
-        radio.prevCurrentVolume();
+        radio.setCurrentVolume(6);
+        radio.decreaseVolume();
         assertEquals(5, radio.getCurrentVolume());
     }
 
-    @Test // Тест max громкость звука
-    public void shouldMaxVolume() {
-        Radio radio = new Radio(
-                1,
-                78);
-        radio.setMaxVolume(100);
-        assertEquals(78, radio.getCurrentVolume());
+    @Test
+    void increaseVolume() {
+        Radio radio = new Radio();
+        radio.setCurrentVolume(5);
+        radio.increaseVolume();
+        assertEquals(6, radio.getCurrentVolume());
     }
 
-    @Test // Тест min громкость звука
-    public void shouldMinVolume() {
-        Radio radio = new Radio(
-                3,
-                43);
-        radio.setMinVolume(0);
-        assertEquals(43, radio.getCurrentVolume());
-    }
-
-    @Test // Тест граничных значений
-    public void shouldBoundaryMaxVolume() {
-        Radio radio = new Radio(
-                5,
-                69);
-        radio.setCurrentVolume(101);
-        radio.nextCurrentVolume();
+    @Test
+    public void increaseVolumeFromMaxVolume() {
+        Radio radio = new Radio();
+        radio.setCurrentVolume(100);
+        radio.increaseVolume();
         assertEquals(100, radio.getCurrentVolume());
     }
 
-    @Test // Тест граничных значений
-    public void shouldBoundaryMinVolume() {
-        Radio radio = new Radio(
-                7,
-                45);
-        radio.setCurrentVolume(-1);
-        radio.prevCurrentVolume();
+    @Test
+    public void decreaseVolumeFromMinVolume() {
+        Radio radio = new Radio();
+        radio.setCurrentVolume(0);
+        radio.decreaseVolume();
         assertEquals(0, radio.getCurrentVolume());
     }
+
+    @Test
+    public void previousChannelFromMin() {
+        Radio radio = new Radio(0,70,80,10,20,10);
+        radio.decreaseChannel();
+        assertEquals(19, radio.getCurrentChannel());
+    }
+
+    @Test
+    public void increaseChannelFromMax() {
+        Radio radio = new Radio();
+        radio.setCurrentChannel(9);
+        radio.increaseChannel();
+        assertEquals(0, radio.getCurrentChannel());
+    }
+
+    @Test
+    public void increaseVolumeFromValue() {
+        Radio radio = new Radio();
+        radio.setCurrentVolume(250);
+        radio.increaseVolume();
+        assertEquals(100, radio.getCurrentVolume());
+    }
+
+    @Test
+    public void decreaseVolumeFromValue() {
+        Radio radio = new Radio();
+        radio.setCurrentVolume(250);
+        radio.decreaseVolume();
+        assertEquals(99, radio.getCurrentVolume());
+    }
+
+    @Test
+    public void increaseChannelFromValue() {
+        Radio radio = new Radio();
+        radio.setCurrentChannel(20);
+        radio.increaseChannel();
+        assertEquals(0, radio.getCurrentChannel());
+    }
+
+    @Test
+    public void previousChannelFromValue() {
+        Radio radio = new Radio();
+        radio.setCurrentChannel(30);
+        radio.decreaseChannel();
+        assertEquals(8, radio.getCurrentChannel());
+    }
+
+    @Test
+    public void decreaseVolumeMinus() {
+        Radio radio = new Radio();
+        radio.setCurrentVolume(-35);
+        radio.decreaseVolume();
+        assertEquals(0, radio.getCurrentVolume() );
+    }
+    @Test
+    public void decreaseChannelMinus() {
+        Radio radio = new Radio();
+        radio.setCurrentChannel(-40);
+        radio.decreaseChannel();
+        assertEquals(9, radio.getCurrentChannel());
+    }
+    @Test
+    void shouldSetNextChannel() {
+        Radio radio = new Radio(7,10);
+        radio.increaseChannel();
+        assertEquals(8,radio.getCurrentChannel());
+    }
+
+    @Test
+    void shouldPreviousChannel() {
+        Radio radio = new Radio(7,10);
+        radio.decreaseChannel();
+        assertEquals(6,radio.getCurrentChannel());
+    }
+
 }
